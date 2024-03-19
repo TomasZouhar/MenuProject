@@ -68,6 +68,7 @@
 		C31A5B512BA2F2DD00470036 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31A5B502BA2F2DD00470036 /* Group.swift */; };
 		C31A5B532BA2F34900470036 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31A5B522BA2F34900470036 /* DataManager.swift */; };
 		C31A5B552BA3126300470036 /* CreateGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C31A5B542BA3126300470036 /* CreateGroupView.swift */; };
+		C3DB80E82BA9E50A005E7CF6 /* GroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DB80E72BA9E50A005E7CF6 /* GroupDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +82,7 @@
 		C31A5B502BA2F2DD00470036 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		C31A5B522BA2F34900470036 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		C31A5B542BA3126300470036 /* CreateGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupView.swift; sourceTree = "<group>"; };
+		C3DB80E72BA9E50A005E7CF6 /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +176,7 @@
 				C31A5B522BA2F34900470036 /* DataManager.swift */,
 				C31A5AD72BA2E6A100470036 /* Assets.xcassets */,
 				C31A5AD92BA2E6A100470036 /* Preview Content */,
+				C3DB80E72BA9E50A005E7CF6 /* GroupDetailView.swift */,
 			);
 			path = MenuProject;
 			sourceTree = "<group>";
@@ -317,6 +320,7 @@
 				C31A5AD62BA2E6A100470036 /* ContentView.swift in Sources */,
 				C31A5B532BA2F34900470036 /* DataManager.swift in Sources */,
 				C31A5AD42BA2E6A100470036 /* MenuProjectApp.swift in Sources */,
+				C3DB80E82BA9E50A005E7CF6 /* GroupDetailView.swift in Sources */,
 				C31A5B4F2BA2F2A800470036 /* ListView.swift in Sources */,
 				C31A5B552BA3126300470036 /* CreateGroupView.swift in Sources */,
 				C31A5B512BA2F2DD00470036 /* Group.swift in Sources */,
