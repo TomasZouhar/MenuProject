@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ListView: View {
     @EnvironmentObject var dataManager: DataManager
@@ -14,12 +15,24 @@ struct ListView: View {
     var body: some View {
         NavigationView {
             List(dataManager.groups, id: \.id){ group in
-                Text(group.name)
+                NavigationLink(destination:{
+                    GroupDetailView(group: group)
+                }, label: {
+                    Text(group.name)
+                })
             }
             .navigationTitle("Groups")
-            .navigationBarItems(trailing: Button(action: {
+            .navigationBarItems(leading: Button(action: {
+                do {
+                    try Auth.auth().signOut()
+                } catch {
+                    print("Error signing out")
+                }
+            }, label: {
+                Text("Logout")
+            }),
+            trailing: Button(action: {
                 showPopup.toggle()
-                
             }, label: {
                 Image(systemName: "plus")
             }))

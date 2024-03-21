@@ -9,12 +9,16 @@ import SwiftUI
 import Firebase
 
 struct ContentView: View {
+    @StateObject var dataManager = DataManager()
+    
     @State private var email = ""
     @State private var password = ""
+    @State private var name = ""
     @State private var userIsLoggedIn = false
     var body: some View {
         if userIsLoggedIn {
             ListView()
+                .environmentObject(dataManager)
         } else {
             content
         }
@@ -24,6 +28,9 @@ struct ContentView: View {
         VStack {
             Text("Menu app")
                 .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+            TextField("Name", text: $name)
+                .background(.yellow)
+                .foregroundColor(.black)
             TextField("Email", text: $email)
                 .background(.yellow)
                 .foregroundColor(.black)
@@ -67,6 +74,9 @@ struct ContentView: View {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if error != nil {
                 print(error!.localizedDescription)
+            }
+            else {
+                dataManager.createUser(name: name, id: result!.user.uid)
             }
         }
     }
