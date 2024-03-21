@@ -14,11 +14,11 @@ struct ListView: View {
     
     var body: some View {
         NavigationView {
-            List(dataManager.groups, id: \.id){ group in
-                NavigationLink(destination:{
+            List(dataManager.groups, id: \.id) { group in
+                NavigationLink(destination: {
                     GroupDetailView(group: group)
                 }, label: {
-                    Text(group.name)
+                    GroupCard(group: group)
                 })
             }
             .navigationTitle("Groups")

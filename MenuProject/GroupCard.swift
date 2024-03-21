@@ -8,11 +8,19 @@
 import SwiftUI
 
 struct GroupCard: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+    var group: Group
 
-#Preview {
-    GroupCard()
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 10) {
+                Text(group.name)
+                    .font(.headline)
+                    .foregroundColor(.black)
+            }
+            Spacer()
+        }
+        .padding()
+        .background(lightYellow)
+        .cornerRadius(10)
+    }
 }
