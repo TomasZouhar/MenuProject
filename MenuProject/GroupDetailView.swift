@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GroupDetailView: View {
+    @EnvironmentObject var dataManager: DataManager
     var group: Group
 
     var body: some View {
@@ -71,16 +72,28 @@ struct GroupDetailView: View {
                     }
                 }
                 Spacer()
-
-                Button("Edit Group Details") {
-                    // Action for editing group details
+                
+                HStack{
+                    Button("Edit Group") {
+                        // Action for editing group details
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(darkYellow)
+                    .foregroundColor(.white)
+                    .cornerRadius(5)
+                    .padding(.horizontal)
+                    
+                    Button("Remove group") {
+                        dataManager.deleteGroup(id: group.id)
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(.red)
+                    .foregroundColor(.white)
+                    .cornerRadius(5)
+                    .padding(.horizontal)
                 }
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(darkYellow)
-                .foregroundColor(.white)
-                .cornerRadius(5)
-                .padding(.horizontal)
 
                 if group.owner == group.owner { // Replace "YourOwnerID" with the actual condition to check if the user is the owner
                     Button("Edit Users") {
