@@ -120,4 +120,20 @@ class DataManager: ObservableObject {
         
         return code
     }
+    
+    func deleteGroup(id: String){
+        let db = Firestore.firestore()
+        let groupsRef = db.collection("Groups").document(id)
+        
+        groupsRef.delete() { error in
+            if let error = error {
+                print("Error deleting group: \(error.localizedDescription)")
+            } else {
+                print("Group successfully deleted")
+                if let index = self.groups.firstIndex(where: { $0.id == id }) {
+                    self.groups.remove(at: index)
+                }
+            }
+        }
+    }
  }

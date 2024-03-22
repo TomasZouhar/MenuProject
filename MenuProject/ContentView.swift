@@ -11,6 +11,9 @@ import Firebase
 struct ContentView: View {
     @StateObject var dataManager = DataManager()
     
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    
     @State private var email = ""
     @State private var password = ""
     @State private var name = ""
@@ -26,39 +29,70 @@ struct ContentView: View {
     
     var content: some View {
         VStack {
-            Text("Menu app")
+            Text("Welcome!")
                 .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
             TextField("Name", text: $name)
-                .background(.yellow)
-                .foregroundColor(.black)
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(5.0)
+                .padding(.bottom, 20)
             TextField("Email", text: $email)
-                .background(.yellow)
-                .foregroundColor(.black)
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(5.0)
+                .padding(.bottom, 20)
             
-            TextField("Password", text: $password)
-                .background(.yellow)
-                .foregroundColor(.black)
+            SecureField("Password", text: $password)
+                .padding()
+                .background(Color(.systemGray6))
+                .cornerRadius(5.0)
+                .padding(.bottom, 20)
             
-            Button {
-                register()
-            } label: {
-                Text("Sign up")
-            }
-            
-            Button {
-                login()
-            } label: {
-                Text("Log in")
-            }
-            .onAppear {
-                Auth.auth().addStateDidChangeListener { auth, user in
-                    if user != nil {
-                        userIsLoggedIn.toggle()
+            HStack{
+                Button {
+                    if isValidForm() {
+                        register()
+                    } else {
+                        self.alertMessage = "Please fill in all fields correctly."
+                        self.showAlert = true
+                    }
+                } label: {
+                    Text("Sign up")
+                }
+                .padding()
+                .foregroundColor(.white)
+                .background(darkYellow)
+                .cornerRadius(5.0)
+                
+                Button {
+                    if isValidForm() {
+                        login()
+                    } else {
+                        self.alertMessage = "Please fill in all fields correctly."
+                        self.showAlert = true
+                    }
+                } label: {
+                    Text("Log in")
+                }
+                .onAppear {
+                    Auth.auth().addStateDidChangeListener { auth, user in
+                        if user != nil {
+                            userIsLoggedIn.toggle()
+                        }
                     }
                 }
+                .padding()
+                .border(darkYellow)
+                .foregroundColor(darkYellow)
+                .background(Color.white)
+                .cornerRadius(5.0)
             }
+        
         }
         .ignoresSafeArea()
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Message"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+        }
     }
     
     func login(){
@@ -79,6 +113,10 @@ struct ContentView: View {
                 dataManager.createUser(name: name, id: result!.user.uid)
             }
         }
+    }
+    
+    func isValidForm() -> Bool {
+        return !email.isEmpty && !password.isEmpty && password.count >= 4
     }
 }
 
