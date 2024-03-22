@@ -14,6 +14,10 @@ struct CreateGroupView: View {
     @State private var groupCode = ""
     var body: some View {
         VStack {
+            Text("Create or join a group")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .frame(maxWidth: .infinity, alignment: .center)
             TextField("Group name", text: $newGroup)
                 .padding()
                 .background(Color(.systemGray6))

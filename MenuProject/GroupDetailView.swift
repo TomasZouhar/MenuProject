@@ -9,6 +9,8 @@ import SwiftUI
 
 struct GroupDetailView: View {
     @EnvironmentObject var dataManager: DataManager
+    @State private var showAllUsers = false
+
     var group: Group
 
     var body: some View {
@@ -24,7 +26,6 @@ struct GroupDetailView: View {
                     .font(.title2)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, alignment: .center)
-                //Text("ID: \(group.id)")
                 Text("\"The best group ever!\"")
                 Text("Owner: \(group.owner)")
             }
@@ -33,44 +34,19 @@ struct GroupDetailView: View {
             .foregroundColor(.white)
             VStack(alignment: .leading, spacing: 10) {
                 HStack{
-                    Text("Users:")
-                        .bold()
-                        .font(.headline)
-                        .padding(.horizontal)
-                    if let joinedUsers = group.joinedUsers, joinedUsers.count > 5 {
-                        Button("Show all users") {
-                            // Action to show all users
-                        }
-                        .padding()
-                        .background(Color.white)
-                        .foregroundColor(lightOrange)
-                        .cornerRadius(5)
-                        .border(lightOrange)
-                        .padding(.horizontal)
+                    Spacer()
+                    if let joinedUsers = group.joinedUsers, joinedUsers.count > 1 {
+                        Toggle("Show all users", isOn: $showAllUsers)
+                            .toggleStyle(SwitchToggleStyle(tint: darkSparklingYellow))
+                            .padding(.trailing, 20)
                     }
 
                 }
                 .frame(maxWidth: .infinity)
 
-                ForEach((group.joinedUsers?.prefix(5) ?? []), id: \.self) { user in
-                    if user == group.owner {
-                        Text(user )
-                            .padding()
-                            .background(lightGreen)
-                            .cornerRadius(5)
-                            .padding(.horizontal)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-
-                    } else {
-                        Text(user )
-                            .padding()
-                            .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.black, lineWidth: 1))
-                            .padding(.horizontal)
-                            .frame(maxWidth: .infinity)
-
+                ForEach(showAllUsers ? group.joinedUsers ?? [] : Array(group.joinedUsers?.prefix(1) ?? []), id: \.self) { user in
+                        UserView(user: user, isOwner: user == group.owner)
                     }
-                }
                 Spacer()
                 
                 HStack{
@@ -109,5 +85,20 @@ struct GroupDetailView: View {
             }
             .padding(.bottom)
         }
+    }
+}
+
+struct UserView: View {
+    var user: String
+    var isOwner: Bool
+
+    var body: some View {
+        Text(user)
+            .padding()
+            .background(isOwner ? lightGreen : Color.white)
+            .cornerRadius(5)
+            .padding(.horizontal)
+            .foregroundColor(isOwner ? .white : .black)
+            .frame(maxWidth: .infinity)
     }
 }
