@@ -51,7 +51,6 @@ struct GroupDetailView: View {
                     ForEach(showAllUsers ? group.joinedUsers ?? [] : Array(group.joinedUsers?.prefix(1) ?? []), id: \.self) { user in
                         UserView(user: user, isOwner: user == group.owner)
                     }
-                    Spacer()
                 }
             }
             .padding(.bottom, 120)
@@ -71,18 +70,20 @@ struct GroupDetailView: View {
             .cornerRadius(5)
             .padding(.horizontal)
             
-            Button("Remove group") {
-                dataManager.deleteGroup(id: group.id)
+            if group.owner == group.owner {
+                Button("Remove group") {
+                    dataManager.deleteGroup(id: group.id)
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(.red)
+                .foregroundColor(.white)
+                .cornerRadius(5)
+                .padding(.horizontal)
             }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(.red)
-            .foregroundColor(.white)
-            .cornerRadius(5)
-            .padding(.horizontal)
         }
         
-        if group.owner == group.owner { // Replace "YourOwnerID" with the actual condition to check if the user is the owner
+        if group.owner == group.owner {
             Button("Edit Users") {
                 // Action for owner to edit users
             }

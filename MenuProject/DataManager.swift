@@ -53,6 +53,7 @@ class DataManager: ObservableObject {
         let groupsRef = db.collection("Groups")
         
         let userId = Auth.auth().currentUser!.uid
+        let userName = Auth.auth().currentUser!.displayName
         
         let code = createInviteCode(maxChars: 6)
         
