@@ -19,11 +19,9 @@ struct ContentView: View {
     @State private var name = ""
     @State private var userIsLoggedIn = false
     var body: some View {
-        if userIsLoggedIn {
-            ListView()
+        NavigationView {
+            LoginPage()
                 .environmentObject(dataManager)
-        } else {
-            content
         }
     }
     
