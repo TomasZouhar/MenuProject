@@ -1,40 +1,34 @@
 //
-//  ContentView.swift
+//  LoginPage.swift
 //  MenuProject
 //
-//  Created by Tomáš Zouhar on 14.03.2024.
+//  Created by Nina Rybárová on 23/04/2024.
 //
 
+import Foundation
 import SwiftUI
 import Firebase
 
-struct ContentView: View {
+struct LoginPage: View {
     @EnvironmentObject var dataManager: DataManager
-
+    
     @State private var showAlert = false
     @State private var alertMessage = ""
     
     @State private var email = ""
     @State private var password = ""
-    @State private var name = ""
     @State private var userIsLoggedIn = false
     var body: some View {
-        if userIsLoggedIn {
-            Homepage()
-        } else {
-            LoginPage()
+        NavigationView {
+            content
         }
     }
     
     var content: some View {
         VStack {
-            Text("Welcome!")
-                .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
-            TextField("Name", text: $name)
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(5.0)
-                .padding(.bottom, 20)
+            Text("Welcome, please log in!")
+                .font(.title)
+                .frame(maxWidth: .infinity, alignment: .center)
             TextField("Email", text: $email)
                 .padding()
                 .background(Color(.systemGray6))
@@ -48,21 +42,15 @@ struct ContentView: View {
                 .padding(.bottom, 20)
             
             HStack{
-                Button {
-                    if isValidForm() {
-                        register()
-                    } else {
-                        self.alertMessage = "Please fill in all fields correctly."
-                        self.showAlert = true
-                    }
-                } label: {
+                NavigationLink(
+                    destination: RegisterPage()) {
                     Text("Sign up")
+                        .padding()
+                        .border(darkSparklingYellow)
+                        .foregroundColor(darkSparklingYellow)
+                        .background(Color.white)
+                        .cornerRadius(5.0)
                 }
-                .padding()
-                .foregroundColor(.white)
-                .background(darkYellow)
-                .cornerRadius(5.0)
-                
                 Button {
                     if isValidForm() {
                         login()
@@ -81,9 +69,9 @@ struct ContentView: View {
                     }
                 }
                 .padding()
-                .border(darkYellow)
-                .foregroundColor(darkYellow)
-                .background(Color.white)
+                .border(darkSparklingYellow)
+                .foregroundColor(Color.white)
+                .background(darkSparklingYellow)
                 .cornerRadius(5.0)
             }
         
@@ -103,22 +91,12 @@ struct ContentView: View {
         }
     }
     
-    func register(){
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
-            if error != nil {
-                print(error!.localizedDescription)
-            }
-            else {
-                dataManager.createUser(name: name, id: result!.user.uid)
-            }
-        }
-    }
-    
     func isValidForm() -> Bool {
         return !email.isEmpty && !password.isEmpty && password.count >= 4
     }
 }
 
 #Preview {
-    ContentView()
+    LoginPage()
+
 }

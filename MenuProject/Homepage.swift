@@ -8,7 +8,7 @@
 import SwiftUI
 import FirebaseAuth
 
-struct ListView: View {
+struct Homepage: View {
     @EnvironmentObject var dataManager: DataManager
     @State private var showPopup = false
     
@@ -43,6 +43,5 @@ struct ListView: View {
 }
 
 #Preview {
-    ListView()
-        .environmentObject(DataManager())
+    Homepage()
 }
