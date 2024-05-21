@@ -1,8 +1,3 @@
-//  LoginPage.swift
-//  MenuProject
-//
-//
-
 import SwiftUI
 import Firebase
 

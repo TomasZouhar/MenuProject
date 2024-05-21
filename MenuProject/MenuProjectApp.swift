@@ -10,13 +10,23 @@ import Firebase
 
 @main
 struct MenuProjectApp: App {
-    
-    init(){
+    @StateObject var userAuth = UserAuth()
+    @StateObject var dataManager = DataManager()
+
+    init() {
         FirebaseApp.configure()
     }
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if userAuth.isLoggedin {
+                ContentView()
+                    .environmentObject(dataManager)
+            } else {
+                LoginPage()
+                    .environmentObject(dataManager)
+            }
         }
+        .environmentObject(userAuth)
     }
 }

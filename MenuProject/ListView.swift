@@ -10,6 +10,7 @@ import FirebaseAuth
 
 struct ListView: View {
     @EnvironmentObject var dataManager: DataManager
+    @EnvironmentObject var userAuth: UserAuth
     @State private var showPopup = false
     
     var body: some View {
@@ -23,11 +24,7 @@ struct ListView: View {
             }
             .navigationTitle("Groups")
             .navigationBarItems(leading: Button(action: {
-                do {
-                    try Auth.auth().signOut()
-                } catch {
-                    print("Error signing out")
-                }
+                userAuth.signOut()
             }, label: {
                 Text("Logout")
             }),

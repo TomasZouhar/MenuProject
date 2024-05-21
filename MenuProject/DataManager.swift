@@ -107,6 +107,94 @@ class DataManager: ObservableObject {
             }
         }
     }
+
+    func startGroupVoting(id: String){
+        let db = Firestore.firestore()
+        let groupsRef = db.collection("Groups").document(id)
+
+        let restaurants = getMockData(maxRestaurants: 5)
+        groupsRef.setData(["votingRestaurants": restaurants.map { ["name": $0.name, "menu": $0.menu.meals.map { ["name": $0.name] }, "distance": $0.distance, "usersVoted": $0.usersVoted] }], merge: true) { error in
+            if let error = error {
+                print("Error setting voting restaurants: \(error.localizedDescription)")
+            } else {
+                print("Voting restaurants set successfully")
+            }
+        }
+
+        groupsRef.setData(["isVoting": true], merge: true) { error in
+            if let error = error {
+                print("Error starting voting: \(error.localizedDescription)")
+            } else {
+                print("Voting started successfully")
+            }
+        }
+    }
+
+    func voteForRestaurant(groupId: String, restaurantId: String, userId: String){
+        let db = Firestore.firestore()
+        let groupsRef = db.collection("Groups").document(groupId)
+
+        groupsRef.getDocument { document, error in
+            if let document = document, document.exists {
+                var restaurants = document.data()?["votingRestaurants"] as? [[String: Any]] ?? []
+                var usersVoted = restaurants.first(where: { $0["name"] as? String == restaurantId })?["usersVoted"] as? [String] ?? []
+
+                if !usersVoted.contains(userId) {
+                    usersVoted.append(userId)
+                    if let index = restaurants.firstIndex(where: { $0["name"] as? String == restaurantId }) {
+                        restaurants[index]["usersVoted"] = usersVoted
+                    }
+
+                    groupsRef.setData(["votingRestaurants": restaurants], merge: true) { error in
+                        if let error = error {
+                            print("Error voting for restaurant: \(error.localizedDescription)")
+                        } else {
+                            print("Voted for restaurant successfully")
+                        }
+                    }
+                } else {
+                    print("User has already voted for this restaurant")
+                }
+            } else {
+                print("Document does not exist")
+            }
+        }
+    }
+
+    func endGroupVoting(id: String){
+        let db = Firestore.firestore()
+        let groupsRef = db.collection("Groups").document(id)
+
+        groupsRef.setData(["isVoting": false], merge: true) { error in
+            if let error = error {
+                print("Error ending voting: \(error.localizedDescription)")
+            } else {
+                print("Voting ended successfully")
+            }
+        }
+    }
+
+    func getRestaurantVotes(id: String, completion: @escaping ([String: Int]) -> Void){
+        let db = Firestore.firestore()
+        let groupsRef = db.collection("Groups").document(id)
+
+        groupsRef.getDocument { document, error in
+            if let document = document, document.exists {
+                let restaurants = document.data()?["votingRestaurants"] as? [[String: Any]] ?? []
+                var votes: [String: Int] = [:]
+
+                for restaurant in restaurants {
+                    let name = restaurant["name"] as? String ?? ""
+                    let usersVoted = restaurant["usersVoted"] as? [String] ?? []
+                    votes[name] = usersVoted.count
+                }
+
+                completion(votes)
+            } else {
+                print("Document does not exist")
+            }
+        }
+    }
     
     func createInviteCode(maxChars: Int) -> String {
         let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

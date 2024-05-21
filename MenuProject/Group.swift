@@ -13,6 +13,8 @@ struct Group: Identifiable {
     var owner: String
     var code: String
     var joinedUsers: [String]?
+    var isVoting: Bool = false
+    var restaurants: [Restaurant] = []
 }
 
 struct User: Identifiable {
