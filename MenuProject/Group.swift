@@ -14,7 +14,7 @@ struct Group: Identifiable {
     var code: String
     var joinedUsers: [String]?
     var isVoting: Bool = false
-    var restaurants: [Restaurant] = []
+    var votingRestaurants: [Restaurant] = []
 }
 
 struct User: Identifiable {

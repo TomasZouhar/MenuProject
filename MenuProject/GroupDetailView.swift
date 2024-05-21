@@ -82,6 +82,12 @@ struct GroupDetailView: View {
             .padding(.horizontal)
         }
         
+        Button(action: {
+            dataManager.startGroupVoting(id: group.id)
+        }, label: {
+            Text("Start voting/restart voting")
+        })
+        
         if group.owner == group.owner { // Replace "YourOwnerID" with the actual condition to check if the user is the owner
             Button("Edit Users") {
                 // Action for owner to edit users
@@ -92,6 +98,18 @@ struct GroupDetailView: View {
             .foregroundColor(.white)
             .cornerRadius(5)
             .padding(.horizontal)
+        }
+
+        if group.isVoting == true {
+            NavigationLink(destination: VotingView(group: group)) {
+                Text("Go Voting!")
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(darkSparklingYellow)
+                    .foregroundColor(.white)
+                    .cornerRadius(5)
+                    .padding(.horizontal)
+            }
         }
     }
 }

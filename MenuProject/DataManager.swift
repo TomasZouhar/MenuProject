@@ -37,8 +37,10 @@ class DataManager: ObservableObject {
                     let owner = data["owner"] as? String ?? ""
                     let joinedUsers = data["joinedUsers"] as? [String]? ?? []
                     let code = data["code"] as? String ?? ""
+                    let isVoting = data["isVoting"] as? Bool ?? false
+                    let restaurants = data["votingRestaurants"] as? [Restaurant] ?? []
                     
-                    let group = Group(id: id, name: name, owner: owner, code: code, joinedUsers: joinedUsers)
+                    let group = Group(id: id, name: name, owner: owner, code: code, joinedUsers: joinedUsers, isVoting: isVoting, votingRestaurants: restaurants)
                     self.groups.append(group)
                 }
             }
@@ -113,7 +115,7 @@ class DataManager: ObservableObject {
         let groupsRef = db.collection("Groups").document(id)
 
         let restaurants = getMockData(maxRestaurants: 5)
-        groupsRef.setData(["votingRestaurants": restaurants.map { ["name": $0.name, "menu": $0.menu.meals.map { ["name": $0.name] }, "distance": $0.distance, "usersVoted": $0.usersVoted] }], merge: true) { error in
+        groupsRef.setData(["votingRestaurants": restaurants.map { ["name": $0.name, "menu": $0.menu.meals.map { ["name": $0.name] }, "distance": $0.distance, "usersVoted": $0.usersVoted, "id": $0.id] }], merge: true) { error in
             if let error = error {
                 print("Error setting voting restaurants: \(error.localizedDescription)")
             } else {
@@ -126,37 +128,6 @@ class DataManager: ObservableObject {
                 print("Error starting voting: \(error.localizedDescription)")
             } else {
                 print("Voting started successfully")
-            }
-        }
-    }
-
-    func voteForRestaurant(groupId: String, restaurantId: String, userId: String){
-        let db = Firestore.firestore()
-        let groupsRef = db.collection("Groups").document(groupId)
-
-        groupsRef.getDocument { document, error in
-            if let document = document, document.exists {
-                var restaurants = document.data()?["votingRestaurants"] as? [[String: Any]] ?? []
-                var usersVoted = restaurants.first(where: { $0["name"] as? String == restaurantId })?["usersVoted"] as? [String] ?? []
-
-                if !usersVoted.contains(userId) {
-                    usersVoted.append(userId)
-                    if let index = restaurants.firstIndex(where: { $0["name"] as? String == restaurantId }) {
-                        restaurants[index]["usersVoted"] = usersVoted
-                    }
-
-                    groupsRef.setData(["votingRestaurants": restaurants], merge: true) { error in
-                        if let error = error {
-                            print("Error voting for restaurant: \(error.localizedDescription)")
-                        } else {
-                            print("Voted for restaurant successfully")
-                        }
-                    }
-                } else {
-                    print("User has already voted for this restaurant")
-                }
-            } else {
-                print("Document does not exist")
             }
         }
     }

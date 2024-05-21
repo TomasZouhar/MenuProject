@@ -72,6 +72,8 @@
 		C3B67B1F2BFBE43E004F282B /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B67B1E2BFBE43E004F282B /* SwiftUIView.swift */; };
 		C3B67B212BFBE457004F282B /* RegisterPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B67B202BFBE457004F282B /* RegisterPage.swift */; };
 		C3B67B252BFC6ABA004F282B /* UserAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B67B242BFC6ABA004F282B /* UserAuth.swift */; };
+		C3B67B272BFC8D9D004F282B /* VotingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B67B262BFC8D9D004F282B /* VotingView.swift */; };
+		C3B67B292BFCC863004F282B /* RestaurantManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B67B282BFCC863004F282B /* RestaurantManager.swift */; };
 		C3DB80E82BA9E50A005E7CF6 /* GroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DB80E72BA9E50A005E7CF6 /* GroupDetailView.swift */; };
 		DD8DB3AE2BAC620A002F94B8 /* GroupCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8DB3AD2BAC620A002F94B8 /* GroupCard.swift */; };
 		DD8DB3B02BAC7307002F94B8 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8DB3AF2BAC7307002F94B8 /* Colors.swift */; };
@@ -92,6 +94,8 @@
 		C3B67B1E2BFBE43E004F282B /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		C3B67B202BFBE457004F282B /* RegisterPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterPage.swift; sourceTree = "<group>"; };
 		C3B67B242BFC6ABA004F282B /* UserAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuth.swift; sourceTree = "<group>"; };
+		C3B67B262BFC8D9D004F282B /* VotingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VotingView.swift; sourceTree = "<group>"; };
+		C3B67B282BFCC863004F282B /* RestaurantManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantManager.swift; sourceTree = "<group>"; };
 		C3DB80E72BA9E50A005E7CF6 /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
 		DD8DB3AD2BAC620A002F94B8 /* GroupCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCard.swift; sourceTree = "<group>"; };
 		DD8DB3AF2BAC7307002F94B8 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
@@ -179,6 +183,7 @@
 		C31A5AD22BA2E6A100470036 /* MenuProject */ = {
 			isa = PBXGroup;
 			children = (
+				C3B67B282BFCC863004F282B /* RestaurantManager.swift */,
 				C31A5B4A2BA2EB2D00470036 /* GoogleService-Info.plist */,
 				C31A5AD32BA2E6A100470036 /* MenuProjectApp.swift */,
 				C31A5AD52BA2E6A100470036 /* ContentView.swift */,
@@ -195,6 +200,7 @@
 				C3B67B1E2BFBE43E004F282B /* SwiftUIView.swift */,
 				C3B67B202BFBE457004F282B /* RegisterPage.swift */,
 				C3B67B242BFC6ABA004F282B /* UserAuth.swift */,
+				C3B67B262BFC8D9D004F282B /* VotingView.swift */,
 			);
 			path = MenuProject;
 			sourceTree = "<group>";
@@ -336,8 +342,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3B67B1B2BFBE365004F282B /* Restaurant.swift in Sources */,
+				C3B67B292BFCC863004F282B /* RestaurantManager.swift in Sources */,
 				C31A5AD62BA2E6A100470036 /* ContentView.swift in Sources */,
 				C3B67B1F2BFBE43E004F282B /* SwiftUIView.swift in Sources */,
+				C3B67B272BFC8D9D004F282B /* VotingView.swift in Sources */,
 				C3B67B212BFBE457004F282B /* RegisterPage.swift in Sources */,
 				DD8DB3B02BAC7307002F94B8 /* Colors.swift in Sources */,
 				DD8DB3AE2BAC620A002F94B8 /* GroupCard.swift in Sources */,
