@@ -49,7 +49,7 @@ struct GroupDetailView: View {
                     }
                     .frame(maxWidth: .infinity)
                     
-                    UserList(users: group.joinedUsers ?? [], showAll: showAllUsers)
+                    UserList(users: group.joinedUsers ?? [], showAll: showAllUsers, ownerId: group.owner)
                     Spacer()
                 }
             }
@@ -116,11 +116,12 @@ struct GroupDetailView: View {
 struct UserList: View {
     var users: [String]
     var showAll: Bool
+    var ownerId: String
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             ForEach(users.prefix(showAll ? users.count : 2), id: \.self) { user in
-                UserView(userId: user, isOwner: user == "undefined")
+                UserView(userId: user, isOwner: user == ownerId)
             }
         }
         .padding()
@@ -141,16 +142,23 @@ struct UserView: View {
     }
     
     var body: some View {
-        Text(userName)
-            .padding()
-            .background(isOwner ? Color.green : Color.white)
-            .cornerRadius(5)
-            .padding(.horizontal)
-            .foregroundColor(isOwner ? .white : .black)
-            .frame(maxWidth: .infinity)
-            .onAppear {
-                fetchUserName()
+        HStack(content: {
+            if isOwner == true {
+                Image(systemName: "crown.fill")
+                    .foregroundColor(.yellow)
             }
+            Text(userName)
+                .padding()
+                .background(isOwner ? Color.green : Color.white)
+                .cornerRadius(5)
+                .padding(.horizontal)
+                .foregroundColor(isOwner ? .white : .black)
+                .frame(maxWidth: .infinity)
+                .onAppear {
+                    fetchUserName()
+                }
+        })
+        
     }
     
     func fetchUserName() {
