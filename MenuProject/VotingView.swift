@@ -62,6 +62,7 @@ struct RestaurantCard: View {
                 }
             }
             Spacer()
+            Text(restaurant.usersVoted.count.description)
             Button(action: {
                 restaurantManager.voteForRestaurant(groupId: groupId, restaurantId: restaurant.id, userId: userId)
             }, label: {
@@ -70,13 +71,12 @@ struct RestaurantCard: View {
             .disabled(alreadyVoted)
         }
         .padding()
-        .background(Color.yellow.opacity(0.3)) // Assuming lightYellow is a color
+        .background(Color.yellow.opacity(0.3))
         .cornerRadius(10)
     }
 }
 
 #Preview {
-    // Creating mock data for preview
     let sampleMeals = [Meal(name: "Meal 1"), Meal(name: "Meal 2"), Meal(name: "Meal 3")]
     let sampleMenu = DayMenu(meals: sampleMeals)
     let sampleRestaurant = Restaurant(id: UUID().uuidString, name: "Sample Restaurant", menu: sampleMenu, distance: 5)

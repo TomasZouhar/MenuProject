@@ -41,7 +41,9 @@ class DataManager: ObservableObject {
                     let restaurants = data["votingRestaurants"] as? [Restaurant] ?? []
                     
                     let group = Group(id: id, name: name, owner: owner, code: code, joinedUsers: joinedUsers, isVoting: isVoting, votingRestaurants: restaurants)
-                    self.groups.append(group)
+                    if(group.joinedUsers?.contains(Auth.auth().currentUser!.uid) ?? false){
+                        self.groups.append(group)
+                    }
                 }
             }
         }

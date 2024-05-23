@@ -33,7 +33,8 @@ struct ListView: View {
             }, label: {
                 Image(systemName: "plus")
             }))
-        }.sheet(isPresented: $showPopup, content: {
+        }
+        .sheet(isPresented: $showPopup, content: {
             CreateGroupView()
         })
     }

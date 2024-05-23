@@ -44,6 +44,7 @@ class RestaurantManager: ObservableObject {
                         let newRestaurant = Restaurant(id: id, name: name, menu: dayMenu, distance: distance, usersVoted: usersVoted)
                         self.restaurants.append(newRestaurant)
                     }
+                    self.restaurants.sort { $0.usersVoted.count.description > $1.usersVoted.count.description }
                 }
                 
                 print(self.restaurants)
