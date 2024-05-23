@@ -20,6 +20,10 @@ class DataManager: ObservableObject {
         let db = Firestore.firestore()
         let ref = db.collection("Groups")
         
+        if Auth.auth().currentUser == nil {
+            return
+        }
+        
         ref.addSnapshotListener { snapshot, error in
             guard error == nil else {
                 print(error!.localizedDescription)

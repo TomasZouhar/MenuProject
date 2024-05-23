@@ -11,61 +11,63 @@ struct LoginPage: View {
     @EnvironmentObject var dataManager: DataManager
     
     var body: some View {
-        if userIsLoggedIn {
-            ListView()
-                .environmentObject(dataManager)
-        } else {
-            VStack {
-                Text("Login")
-                    .font(.title)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                
-                TextField("Email", text: $email)
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(5.0)
-                    .padding(.bottom, 20)
-                
-                SecureField("Password", text: $password)
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(5.0)
-                    .padding(.bottom, 20)
-                
-                Button {
-                    if isValidForm() {
-                        login()
-                    } else {
-                        self.alertMessage = "Please fill in all fields correctly."
-                        self.showAlert = true
+            NavigationView {
+                if userIsLoggedIn {
+                    ListView()
+                        .environmentObject(dataManager)
+                } else {
+                    VStack {
+                        Text("Login")
+                            .font(.title)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        
+                        TextField("Email", text: $email)
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(5.0)
+                            .padding(.bottom, 20)
+                        
+                        SecureField("Password", text: $password)
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(5.0)
+                            .padding(.bottom, 20)
+                        
+                        Button {
+                            if isValidForm() {
+                                login()
+                            } else {
+                                self.alertMessage = "Please fill in all fields correctly."
+                                self.showAlert = true
+                            }
+                        } label: {
+                            Text("Log in")
+                        }
+                        .padding()
+                        .foregroundColor(.white)
+                        .background(Color.yellow)  // Assuming `darkYellow` is defined as a custom color
+                        .cornerRadius(5.0)
+                        
+                        NavigationLink(destination: RegisterPage().environmentObject(dataManager)) {
+                            Text("Don't have an account? Sign up")
+                                .foregroundColor(.blue)
+                        }
                     }
-                } label: {
-                    Text("Log in")
-                }
-                .padding()
-                .foregroundColor(.white)
-                .background(darkYellow)
-                .cornerRadius(5.0)
-                
-                NavigationLink(destination: RegisterPage().environmentObject(dataManager)) {
-                    Text("Don't have an account? Sign up")
-                        .foregroundColor(.blue)
-                }
-            }
-            .padding()
-            .navigationTitle("Login")
-            .alert(isPresented: $showAlert) {
-                Alert(title: Text("Message"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-            }
-            .onAppear {
-                Auth.auth().addStateDidChangeListener { auth, user in
-                    if user != nil {
-                        userIsLoggedIn.toggle()
+                    .padding()
+                    .navigationTitle("Login")
+                    .alert(isPresented: $showAlert) {
+                        Alert(title: Text("Message"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                    }
+                    .onAppear {
+                        Auth.auth().addStateDidChangeListener { auth, user in
+                            if user != nil {
+                                userIsLoggedIn.toggle()
+                            }
+                        }
                     }
                 }
             }
         }
-    }
     
     func login(){
         Auth.auth().signIn(withEmail: email, password: password) {
