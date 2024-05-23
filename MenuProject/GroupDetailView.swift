@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct GroupDetailView: View {
     @EnvironmentObject var dataManager: DataManager
@@ -28,7 +29,7 @@ struct GroupDetailView: View {
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity, alignment: .center)
                     Text("\"The best group ever!\"")
-                    Text("Owner: \(group.owner)")
+                    //Text("Owner: \(group.owner)")
                 }
                 .padding(.bottom)
                 .background(sparklingYellow)
@@ -48,9 +49,7 @@ struct GroupDetailView: View {
                     }
                     .frame(maxWidth: .infinity)
                     
-                    ForEach(showAllUsers ? group.joinedUsers ?? [] : Array(group.joinedUsers?.prefix(1) ?? []), id: \.self) { user in
-                        UserView(user: user, isOwner: user == group.owner)
-                    }
+                    UserList(users: group.joinedUsers ?? [], showAll: showAllUsers)
                     Spacer()
                 }
             }
@@ -114,17 +113,66 @@ struct GroupDetailView: View {
     }
 }
 
-struct UserView: View {
-    var user: String
-    var isOwner: Bool
-
+struct UserList: View {
+    var users: [String]
+    var showAll: Bool
+    
     var body: some View {
-        Text(user)
+        VStack(alignment: .leading, spacing: 10) {
+            ForEach(users.prefix(showAll ? users.count : 2), id: \.self) { user in
+                UserView(userId: user, isOwner: user == "undefined")
+            }
+        }
+        .padding()
+        .background(lightYellow)
+        .cornerRadius(10)
+    }
+
+}
+
+struct UserView: View {
+    var userId: String
+    var isOwner: Bool
+    @State private var userName: String = ""
+    
+    init(userId: String, isOwner: Bool) {
+        self.userId = userId
+        self.isOwner = isOwner
+    }
+    
+    var body: some View {
+        Text(userName)
             .padding()
-            .background(isOwner ? lightGreen : Color.white)
+            .background(isOwner ? Color.green : Color.white)
             .cornerRadius(5)
             .padding(.horizontal)
             .foregroundColor(isOwner ? .white : .black)
             .frame(maxWidth: .infinity)
+            .onAppear {
+                fetchUserName()
+            }
+    }
+    
+    func fetchUserName() {
+        let db = Firestore.firestore()
+        let ref = db.collection("Users").document(userId)
+        
+        ref.getDocument { snapshot, error in
+            guard error == nil else {
+                print(error!.localizedDescription)
+                return
+            }
+            
+            if let snapshot = snapshot {
+                let data = snapshot.data()
+                print(data ?? "No data")
+                if let name = data?["name"] as? String {
+                    DispatchQueue.main.async {
+                        self.userName = name
+                    }
+                }
+                print(userName)
+            }
+        }
     }
 }

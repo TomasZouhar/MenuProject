@@ -91,4 +91,9 @@ class RestaurantManager: ObservableObject {
 
         updateRestaurantsInGroup()
     }
+
+    func getRestaurantVotes(restaurantId: String) -> Int {
+        let restaurant = restaurants.first { $0.id == restaurantId }
+        return restaurant?.usersVoted.count ?? 0
+    }
 }
