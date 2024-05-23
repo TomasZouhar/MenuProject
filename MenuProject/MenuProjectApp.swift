@@ -20,11 +20,15 @@ struct MenuProjectApp: App {
     var body: some Scene {
         WindowGroup {
             if userAuth.isLoggedin {
-                ContentView()
-                    .environmentObject(dataManager)
+                NavigationView(content: {
+                    ContentView()
+                        .environmentObject(dataManager)
+                })
             } else {
-                LoginPage()
-                    .environmentObject(dataManager)
+                NavigationView(content: {
+                    LoginPage()
+                        .environmentObject(dataManager)
+                })
             }
         }
         .environmentObject(userAuth)

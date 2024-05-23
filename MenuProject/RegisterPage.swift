@@ -67,7 +67,7 @@ struct RegisterPage: View {
             .background(darkYellow)
             .cornerRadius(5.0)
             
-            NavigationLink(destination: LoginPage()) {
+            NavigationLink(destination: LoginPage().environmentObject(dataManager)){
                 Text("Already have an account? Log in")
                     .foregroundColor(.blue)
             }
