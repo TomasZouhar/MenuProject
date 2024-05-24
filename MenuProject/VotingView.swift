@@ -12,17 +12,19 @@ struct VotingView: View {
     }
 
     var body: some View {
-        VStack {
-            Text("Today's menu")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .frame(maxWidth: .infinity, alignment: .center)
-            ForEach(restaurantManager.restaurants, id: \.id) { restaurant in
-                RestaurantCard(restaurant: restaurant, groupId: group.id, userId: Auth.auth().currentUser!.uid)
-                    .environmentObject(restaurantManager)
+        ScrollView {
+            VStack {
+                Text("Today's menu")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                ForEach(restaurantManager.restaurants, id: \.id) { restaurant in
+                    RestaurantCard(restaurant: restaurant, groupId: group.id, userId: Auth.auth().currentUser!.uid)
+                        .environmentObject(restaurantManager)
+                }
             }
+            .padding()
         }
-        .padding()
         .onAppear {
             restaurantManager.fetchRestaurants()
             print("Fetching restaurants")
@@ -32,6 +34,7 @@ struct VotingView: View {
         }
     }
 }
+
 
 struct RestaurantCard: View {
     var restaurant: Restaurant

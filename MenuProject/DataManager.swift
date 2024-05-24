@@ -120,20 +120,32 @@ class DataManager: ObservableObject {
         let db = Firestore.firestore()
         let groupsRef = db.collection("Groups").document(id)
 
-        let restaurants = getMockData(maxRestaurants: 5)
-        groupsRef.setData(["votingRestaurants": restaurants.map { ["name": $0.name, "menu": $0.menu.meals.map { ["name": $0.name] }, "distance": $0.distance, "usersVoted": $0.usersVoted, "id": $0.id] }], merge: true) { error in
-            if let error = error {
-                print("Error setting voting restaurants: \(error.localizedDescription)")
-            } else {
-                print("Voting restaurants set successfully")
-            }
-        }
+        //let restaurants = getMockData(maxRestaurants: 5)
+        // Await data from getDataFromAPI()
+        var restaurants: [Restaurant] = []
+        getDataFromAPI { fetchedRestaurants in
+            if let fetchedRestaurants = fetchedRestaurants {
+                restaurants = fetchedRestaurants
+                for restaurant in restaurants {
+                    print(restaurant.name)
+                }
+                groupsRef.setData(["votingRestaurants": restaurants.map { ["name": $0.name, "menu": $0.menu.meals.map { ["name": $0.name] }, "distance": $0.distance, "usersVoted": $0.usersVoted, "id": $0.id] }], merge: true) { error in
+                    if let error = error {
+                        print("Error setting voting restaurants: \(error.localizedDescription)")
+                    } else {
+                        print("Voting restaurants set successfully")
+                    }
+                }
 
-        groupsRef.setData(["isVoting": true], merge: true) { error in
-            if let error = error {
-                print("Error starting voting: \(error.localizedDescription)")
+                groupsRef.setData(["isVoting": true], merge: true) { error in
+                    if let error = error {
+                        print("Error starting voting: \(error.localizedDescription)")
+                    } else {
+                        print("Voting started successfully")
+                    }
+                }
             } else {
-                print("Voting started successfully")
+                print("Failed to fetch restaurants.")
             }
         }
     }

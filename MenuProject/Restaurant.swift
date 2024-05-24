@@ -31,3 +31,57 @@ func getMockData(maxRestaurants: Int) -> [Restaurant] {
     }
     return restaurants
 }
+
+func getDataFromAPI(completion: @escaping ([Restaurant]?) -> Void) {
+    guard let url = URL(string: "https://menuparser.azurewebsites.net/api/menu/parse?url=https://www.menicka.cz/brno.html") else {
+        completion(nil)
+        return
+    }
+    
+    var request = URLRequest(url: url)
+    request.httpMethod = "GET"
+    
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            print(error.localizedDescription)
+            completion(nil)
+            return
+        }
+        
+        guard let data = data else {
+            completion(nil)
+            return
+        }
+        
+        do {
+            if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]] {
+                var restaurants: [Restaurant] = []
+                for restaurantData in json {
+                    if let name = restaurantData["Name"] as? String,
+                       let distance = restaurantData["Distance"] as? Int,
+                       let menuData = restaurantData["Menu"] as? [String: Any],
+                       let mealsData = menuData["Meals"] as? [String] {
+                        
+                        var dayMenu = DayMenu()
+                        for mealName in mealsData {
+                            dayMenu.addMeal(Meal(name: mealName))
+                        }
+
+                        let id = UUID().uuidString
+                        
+                        let restaurant = Restaurant(id: id, name: name, menu: dayMenu, distance: distance, usersVoted: [])
+                        restaurants.append(restaurant)
+                    }
+                }
+                completion(restaurants)
+            } else {
+                completion(nil)
+            }
+        } catch {
+            print(error.localizedDescription)
+            completion(nil)
+        }
+    }
+    
+    task.resume()
+}
