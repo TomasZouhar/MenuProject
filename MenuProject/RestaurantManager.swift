@@ -38,7 +38,7 @@ class RestaurantManager: ObservableObject {
                         
                         var dayMenu = DayMenu()
                         for meal in meals {
-                            dayMenu.addMeal(Meal(name: meal))
+                            dayMenu.meals.append(Meal(name: meal))
                         }
                         
                         let newRestaurant = Restaurant(id: id, name: name, menu: dayMenu, distance: distance, usersVoted: usersVoted)

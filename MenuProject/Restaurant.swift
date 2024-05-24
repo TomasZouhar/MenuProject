@@ -6,9 +6,6 @@ struct Meal {
 
 struct DayMenu {
     var meals: [Meal] = []
-    mutating func addMeal(_ meal: Meal) {
-        meals.append(meal)
-    }
 }
 
 struct Restaurant: Identifiable {
@@ -25,7 +22,7 @@ func getMockData(maxRestaurants: Int) -> [Restaurant] {
         var id = UUID().uuidString
         var restaurant = Restaurant(id: id, name: "Restaurant \(i)", menu: DayMenu(), distance: Int.random(in: 1...10), usersVoted: [])
         for j in 0..<5 {
-            restaurant.menu.addMeal(Meal(name: "Meal \(j)"))
+            restaurant.menu.meals.append(Meal(name: "Meal \(j)"))
         }
         restaurants.append(restaurant)
     }
@@ -54,29 +51,28 @@ func getDataFromAPI(completion: @escaping ([Restaurant]?) -> Void) {
         }
         
         do {
-            if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]] {
-                var restaurants: [Restaurant] = []
-                for restaurantData in json {
-                    if let name = restaurantData["Name"] as? String,
-                       let distance = restaurantData["Distance"] as? Int,
-                       let menuData = restaurantData["Menu"] as? [String: Any],
-                       let mealsData = menuData["Meals"] as? [String] {
-                        
-                        var dayMenu = DayMenu()
-                        for mealName in mealsData {
-                            dayMenu.addMeal(Meal(name: mealName))
-                        }
-
-                        let id = UUID().uuidString
-                        
-                        let restaurant = Restaurant(id: id, name: name, menu: dayMenu, distance: distance, usersVoted: [])
-                        restaurants.append(restaurant)
-                    }
+            let json = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
+            let restaurants = json?.compactMap { restaurantData -> Restaurant? in
+                guard let name = restaurantData["Name"] as? String,
+                      let distance = restaurantData["Distance"] as? Int,
+                      let menuData = restaurantData["Menu"] as? [String: Any],
+                      let mealsData = menuData["Meals"] as? [[String: Any]] else {
+                    return nil
                 }
-                completion(restaurants)
-            } else {
-                completion(nil)
+                
+                var dayMenu = DayMenu()
+                for mealData in mealsData {
+                    guard let mealName = mealData["Name"] as? String else {
+                        continue
+                    }
+                    dayMenu.meals.append(Meal(name: mealName))
+                    print("DayMenu" + mealName)
+                }
+                
+                let id = UUID().uuidString
+                return Restaurant(id: id, name: name, menu: dayMenu, distance: distance, usersVoted: [])
             }
+            completion(restaurants)
         } catch {
             print(error.localizedDescription)
             completion(nil)
