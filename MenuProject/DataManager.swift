@@ -16,7 +16,7 @@ class DataManager: ObservableObject {
         fetchGroups()
     }
     
-    func fetchGroups(){
+    func fetchGroups() {
         let db = Firestore.firestore()
         let ref = db.collection("Groups")
         
@@ -39,19 +39,43 @@ class DataManager: ObservableObject {
                     let id = data["id"] as? String ?? ""
                     let name = data["name"] as? String ?? ""
                     let owner = data["owner"] as? String ?? ""
-                    let joinedUsers = data["joinedUsers"] as? [String]? ?? []
+                    let joinedUsers = data["joinedUsers"] as? [String] ?? []
                     let code = data["code"] as? String ?? ""
                     let isVoting = data["isVoting"] as? Bool ?? false
-                    let restaurants = data["votingRestaurants"] as? [Restaurant] ?? []
+                    
+                    // Extract and convert restaurant data
+                    var restaurants: [Restaurant] = []
+                    if let restaurantDataArray = data["votingRestaurants"] as? [[String: Any]] {
+                        for restaurantData in restaurantDataArray {
+                            let restaurantId = restaurantData["id"] as? String ?? ""
+                            let restaurantName = restaurantData["name"] as? String ?? ""
+                            let distance = restaurantData["distance"] as? Int ?? 0
+                            let menuArray = restaurantData["menu"] as? [[String: Any]] ?? []
+                            let usersVoted = restaurantData["usersVoted"] as? [String] ?? []
+                            
+                            var dayMenu = DayMenu()
+                            for menuItem in menuArray {
+                                if let mealName = menuItem["name"] as? String {
+                                    dayMenu.meals.append(Meal(name: mealName))
+                                }
+                            }
+                            
+                            let newRestaurant = Restaurant(id: restaurantId, name: restaurantName, menu: dayMenu, distance: distance, usersVoted: usersVoted)
+                            restaurants.append(newRestaurant)
+                        }
+                        // Sort restaurants by the number of users who voted
+                        restaurants.sort { $0.usersVoted.count > $1.usersVoted.count }
+                    }
                     
                     let group = Group(id: id, name: name, owner: owner, code: code, joinedUsers: joinedUsers, isVoting: isVoting, votingRestaurants: restaurants)
-                    if(group.joinedUsers?.contains(Auth.auth().currentUser!.uid) ?? false){
+                    if joinedUsers.contains(Auth.auth().currentUser!.uid) {
                         self.groups.append(group)
                     }
                 }
             }
         }
     }
+
     
     func createGroup(name: String){
         let id = UUID().uuidString
