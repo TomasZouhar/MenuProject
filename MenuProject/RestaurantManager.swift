@@ -26,19 +26,22 @@ class RestaurantManager: ObservableObject {
                 self.restaurants.removeAll()
                 
                 let data = snapshot.data()
+                print("Printing data")
+                print(data)
                 // Convert data to Restaurant objects
                 if let restaurants = data?["votingRestaurants"] as? [[String: Any]] {
                     for restaurant in restaurants {
                         let id = restaurant["id"] as? String ?? ""
                         let name = restaurant["name"] as? String ?? ""
                         let distance = restaurant["distance"] as? Int ?? 0
-                        let menu = restaurant["menu"] as? [String: Any] ?? [:]
-                        let meals = menu["meals"] as? [String] ?? []
+                        let menuArray = restaurant["menu"] as? [[String: Any]] ?? []
                         let usersVoted = restaurant["usersVoted"] as? [String] ?? []
                         
                         var dayMenu = DayMenu()
-                        for meal in meals {
-                            dayMenu.meals.append(Meal(name: meal))
+                        for menuItem in menuArray {
+                            if let mealName = menuItem["name"] as? String {
+                                dayMenu.meals.append(Meal(name: mealName))
+                            }
                         }
                         
                         let newRestaurant = Restaurant(id: id, name: name, menu: dayMenu, distance: distance, usersVoted: usersVoted)
@@ -63,11 +66,9 @@ class RestaurantManager: ObservableObject {
                     "id": restaurant.id,
                     "name": restaurant.name,
                     "distance": restaurant.distance,
-                    "menu": [
-                        "meals": restaurant.menu.meals.map { meal in
-                            meal.name
-                        }
-                    ],
+                    "menu": restaurant.menu.meals.map { meal in
+                        ["name": meal.name]
+                    },
                     "usersVoted": restaurant.usersVoted
                 ]
             }
@@ -79,6 +80,7 @@ class RestaurantManager: ObservableObject {
             print("Restaurants updated in group")
         }
     }
+
 
     func voteForRestaurant(groupId: String, restaurantId: String, userId: String){
         let db = Firestore.firestore()
