@@ -6,24 +6,35 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct ListView: View {
     @EnvironmentObject var dataManager: DataManager
+    @EnvironmentObject var userAuth: UserAuth
     @State private var showPopup = false
     
     var body: some View {
         NavigationView {
-            List(dataManager.groups, id: \.id){ group in
-                Text(group.name)
+            List(dataManager.groups, id: \.id) { group in
+                NavigationLink(destination: {
+                    GroupDetailView(group: group)
+                }, label: {
+                    GroupCard(group: group)
+                })
             }
             .navigationTitle("Groups")
-            .navigationBarItems(trailing: Button(action: {
+            .navigationBarItems(leading: Button(action: {
+                userAuth.signOut()
+            }, label: {
+                Text("Logout")
+            }),
+            trailing: Button(action: {
                 showPopup.toggle()
-                
             }, label: {
                 Image(systemName: "plus")
             }))
-        }.sheet(isPresented: $showPopup, content: {
+        }
+        .sheet(isPresented: $showPopup, content: {
             CreateGroupView()
         })
     }

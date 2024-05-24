@@ -10,4 +10,14 @@ import Foundation
 struct Group: Identifiable {
     var id: String
     var name: String
+    var owner: String
+    var code: String
+    var joinedUsers: [String]?
+    var isVoting: Bool = false
+    var votingRestaurants: [Restaurant] = []
+}
+
+struct User: Identifiable {
+    var id: String
+    var name: String
 }
