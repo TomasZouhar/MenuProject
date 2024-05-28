@@ -71,18 +71,15 @@ struct GroupDetailView: View {
             Spacer()
             
             if group.owner == Auth.auth().currentUser?.uid {
-                VStack {
-                    Button("Edit Group") {
-                        showEditGroupView.toggle()
+                    NavigationLink(destination: EditGroupView(group: group)) {
+                        Text("Edit Group")
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(goldOrange)
+                            .foregroundColor(.white)
+                            .cornerRadius(5)
+                            .padding(.horizontal)
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(goldOrange)
-                    .foregroundColor(.white)
-                    .cornerRadius(5)
-                    .padding(.horizontal)
-                }
-        
             }
 
             if group.isVoting {
@@ -114,9 +111,5 @@ struct GroupDetailView: View {
                 }
             }
         )
-        
-        NavigationLink(destination: EditGroupView(group: group), isActive: $showEditGroupView) {
-            EmptyView()
-        }
     }
 }

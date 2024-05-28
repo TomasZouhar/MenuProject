@@ -11,7 +11,9 @@ struct EditGroupView: View {
     @EnvironmentObject var dataManager: DataManager
     @State private var groupName: String
     @State private var newUserEmail: String = ""
-    @State private var showConfirmDeleteAlert = false
+    @State private var showConfirmDeleteGroupAlert = false
+    @State private var showConfirmDeleteUserAlert = false
+    @State private var userToDelete: String? = nil
     
     var group: Group
     
@@ -45,7 +47,8 @@ struct EditGroupView: View {
             
             ScrollView {
                 UserList(users: group.joinedUsers ?? [], showAll: true, ownerId: group.owner, displayOwner: false, displayRemove: true, onRemove: { userId in
-                    dataManager.removeUserFromGroup(userId: userId, groupId: group.id)
+                    userToDelete = userId
+                    showConfirmDeleteUserAlert = true
                 })
             }
             .frame(height: 200)
@@ -69,7 +72,7 @@ struct EditGroupView: View {
             Spacer()
             
             Button("Delete Group") {
-                showConfirmDeleteAlert.toggle()
+                showConfirmDeleteGroupAlert = true
             }
             .padding()
             .frame(maxWidth: .infinity)
@@ -77,12 +80,24 @@ struct EditGroupView: View {
             .foregroundColor(.white)
             .cornerRadius(5)
             .padding(.horizontal)
-            .alert(isPresented: $showConfirmDeleteAlert) {
+            .alert(isPresented: $showConfirmDeleteGroupAlert) {
                 Alert(
                     title: Text("Confirm Delete"),
                     message: Text("Are you sure you want to delete this group?"),
                     primaryButton: .destructive(Text("Delete")) {
                         dataManager.deleteGroup(id: group.id)
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
+            .alert(isPresented: $showConfirmDeleteUserAlert) {
+                Alert(
+                    title: Text("Confirm Delete"),
+                    message: Text("Are you sure you want to remove this user?"),
+                    primaryButton: .destructive(Text("Remove")) {
+                        if let userId = userToDelete {
+                            dataManager.removeUserFromGroup(userId: userId, groupId: group.id)
+                        }
                     },
                     secondaryButton: .cancel()
                 )

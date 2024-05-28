@@ -239,28 +239,28 @@ class DataManager: ObservableObject {
     }
     
     func addUserToGroup(name: String, groupId: String) {
-        let db = Firestore.firestore()
+            let db = Firestore.firestore()
 
-        db.collection("Users").whereField("name", isEqualTo: name).getDocuments { querySnapshot, error in
-            guard let documents = querySnapshot?.documents, let document = documents.first else {
-                print("User not found")
-                return
-            }
+            db.collection("Users").whereField("name", isEqualTo: name).getDocuments { querySnapshot, error in
+                guard let documents = querySnapshot?.documents, let document = documents.first else {
+                    print("User not found")
+                    return
+                }
 
-            let userId = document.documentID
+                let userId = document.documentID
 
-            db.collection("Groups").document(groupId).updateData([
-                "joinedUsers": FieldValue.arrayUnion([userId])
-            ]) { error in
-                if let error = error {
-                    print("Error adding user: \(error.localizedDescription)")
-                } else {
-                    print("User added successfully")
-                    self.fetchGroups() // Fetch updated groups
+                db.collection("Groups").document(groupId).updateData([
+                    "joinedUsers": FieldValue.arrayUnion([userId])
+                ]) { error in
+                    if let error = error {
+                        print("Error adding user: \(error.localizedDescription)")
+                    } else {
+                        print("User added successfully")
+                        self.fetchGroups() // Fetch updated groups
+                    }
                 }
             }
         }
-    }
     
     func removeUserFromGroup(userId: String, groupId: String) {
             let db = Firestore.firestore()

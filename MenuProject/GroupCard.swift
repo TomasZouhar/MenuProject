@@ -15,12 +15,12 @@ struct GroupCard: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text(group.name)
                     .font(.headline)
-                    .foregroundColor(.black)
+                    .foregroundColor(.white)
             }
             Spacer()
         }
         .padding()
-        .background(lightYellow)
+        .background(goldOrange)
         .cornerRadius(10)
     }
 }

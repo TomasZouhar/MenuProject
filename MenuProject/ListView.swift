@@ -13,6 +13,14 @@ struct ListView: View {
     @EnvironmentObject var userAuth: UserAuth
     @State private var showPopup = false
     
+    init() {
+        //Use this if NavigationBarTitle is with Large Font
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(goldOrange)]
+
+        //Use this if NavigationBarTitle is with displayMode = .inline
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(goldOrange)]
+    }
+    
     var body: some View {
         NavigationView {
             List(dataManager.groups, id: \.id) { group in
@@ -22,7 +30,7 @@ struct ListView: View {
                     GroupCard(group: group)
                 })
             }
-            .navigationTitle("Groups")
+            .navigationTitle("Your groups")
             .navigationBarItems(leading: Button(action: {
                 userAuth.signOut()
                 dataManager.clearData()

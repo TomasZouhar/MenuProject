@@ -17,6 +17,7 @@ struct VotingView: View {
                 Text("Today's menu")
                     .font(.largeTitle)
                     .fontWeight(.bold)
+                    .foregroundColor(goldOrange)
                     .frame(maxWidth: .infinity, alignment: .center)
                 ForEach(restaurantManager.restaurants, id: \.id) { restaurant in
                     RestaurantCard(restaurant: restaurant, groupId: group.id, userId: Auth.auth().currentUser!.uid)
