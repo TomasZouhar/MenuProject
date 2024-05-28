@@ -25,6 +25,7 @@ struct ListView: View {
             .navigationTitle("Groups")
             .navigationBarItems(leading: Button(action: {
                 userAuth.signOut()
+                dataManager.clearData()
             }, label: {
                 Text("Logout")
             }),
