@@ -19,3 +19,10 @@ var darkSparklingYellow = Color(red: 1, green: 177/255, blue: 0)
 var sparklingYellow = Color(red: 251, green: 194/255, blue: 82/255)
 var veryLightGreen = Color(red: 240/255, green: 236/255, blue: 207/255)
 var lightGreen = Color(red: 163/255, green: 187/255, blue: 152/255)
+
+
+// https://colorhunt.co/palette/ffbb5cff9b50e25e3ec63d2f
+var goldOrange = Color(red: 1, green: 187/255, blue: 92/255)
+var goldDarkOrange = Color(red: 1, green: 155/255, blue: 80/255)
+var goldRed = Color(red: 226/255, green: 94/255, blue: 62/255)
+var goldDarkRed = Color(red: 198/255, green: 61/255, blue: 41/255)
