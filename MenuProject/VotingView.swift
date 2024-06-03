@@ -17,6 +17,7 @@ struct VotingView: View {
                 Text("Today's menu")
                     .font(.largeTitle)
                     .fontWeight(.bold)
+                    .foregroundColor(goldOrange)
                     .frame(maxWidth: .infinity, alignment: .center)
                 ForEach(restaurantManager.restaurants, id: \.id) { restaurant in
                     RestaurantCard(restaurant: restaurant, groupId: group.id, userId: Auth.auth().currentUser!.uid)
@@ -27,27 +28,18 @@ struct VotingView: View {
         }
         .onAppear {
             restaurantManager.fetchRestaurants()
-            print("Fetching restaurants")
-            for restaurant in restaurantManager.restaurants {
-                print(restaurant.name)
-            }
         }
     }
 }
-
 
 struct RestaurantCard: View {
     var restaurant: Restaurant
     var groupId: String
     var userId: String
-    var alreadyVoted: Bool = false
     @EnvironmentObject var restaurantManager: RestaurantManager
 
-    init(restaurant: Restaurant, groupId: String, userId: String) {
-        self.restaurant = restaurant
-        self.groupId = groupId
-        self.userId = userId
-        self.alreadyVoted = restaurant.usersVoted.contains(userId)
+    var alreadyVoted: Bool {
+        restaurant.usersVoted.contains(userId)
     }
 
     var body: some View {
@@ -57,34 +49,38 @@ struct RestaurantCard: View {
                     .font(.headline)
                     .foregroundColor(.black)
                 ForEach(restaurant.menu.meals, id: \.name) { meal in
-                    HStack(content: {
-                        Text(meal.name)
-                            .font(.subheadline)
-                            .foregroundColor(.black)
-                    })
+                    Text(meal.name)
+                        .font(.subheadline)
+                        .foregroundColor(.black)
                 }
             }
             Spacer()
-            Text(restaurant.usersVoted.count.description)
-            Button(action: {
-                restaurantManager.voteForRestaurant(groupId: groupId, restaurantId: restaurant.id, userId: userId)
-            }, label: {
-                Text("Vote")
-            })
-            .disabled(alreadyVoted)
+            VStack {
+                Text("\(restaurant.usersVoted.count)")
+                Button(action: {
+                    restaurantManager.voteForRestaurant(groupId: groupId, restaurantId: restaurant.id, userId: userId)
+                }, label: {
+                    Image(systemName: alreadyVoted ? "hand.thumbsup.fill" : "hand.thumbsup")
+                        .foregroundColor(alreadyVoted ? .blue : .gray)
+                })
+                .disabled(alreadyVoted)
+            }
         }
         .padding()
-        .background(Color.yellow.opacity(0.3))
+        .background(darkYellow)
         .cornerRadius(10)
     }
 }
 
-#Preview {
-    let sampleMeals = [Meal(name: "Meal 1"), Meal(name: "Meal 2"), Meal(name: "Meal 3")]
-    let sampleMenu = DayMenu(meals: sampleMeals)
-    let sampleRestaurant = Restaurant(id: UUID().uuidString, name: "Sample Restaurant", menu: sampleMenu, distance: 5)
-    let sampleGroup = Group(id: "123", name: "123", owner: "123", code: "123")
+struct VotingView_Previews: PreviewProvider {
+    static var previews: some View {
+        let sampleMeals = [Meal(name: "Meal 1"), Meal(name: "Meal 2"), Meal(name: "Meal 3")]
+        let sampleMenu = DayMenu(meals: sampleMeals)
+        let sampleRestaurant = Restaurant(id: UUID().uuidString, name: "Sample Restaurant", menu: sampleMenu, distance: 5)
+        let sampleGroup = Group(id: "123", name: "123", owner: "123", code: "123", joinedUsers: ["user1", "user2"], isVoting: true, votingRestaurants: [sampleRestaurant])
 
-    return VotingView(group: sampleGroup)
-        .environmentObject(DataManager())
+        return VotingView(group: sampleGroup)
+            .environmentObject(DataManager())
+            .environmentObject(RestaurantManager(groupId: sampleGroup.id))
+    }
 }

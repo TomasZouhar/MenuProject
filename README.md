@@ -4,7 +4,7 @@ App for users to create or join group of other users. In these groups owner can 
 When creating group, join code is generated which is then used for other users to join the group.
 
 ## Components
-Frontent is written in Swift using UIKit. Backend is mainly in Swift, database is Firebase Firestore. We use Firebase Auth for user authentication. Menu parsing API is written in dotnet and deployed to azure websites. 
+Frontend is written in Swift using UIKit. Backend is mainly in Swift, database is Firebase Firestore. We use Firebase Auth for user authentication. Menu parsing API is written in dotnet and deployed to azure websites. 
 
 ## Developers
 - Tomáš Zouhar
