@@ -77,6 +77,9 @@
 		C3DB80E82BA9E50A005E7CF6 /* GroupDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3DB80E72BA9E50A005E7CF6 /* GroupDetailView.swift */; };
 		DD8DB3AE2BAC620A002F94B8 /* GroupCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8DB3AD2BAC620A002F94B8 /* GroupCard.swift */; };
 		DD8DB3B02BAC7307002F94B8 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD8DB3AF2BAC7307002F94B8 /* Colors.swift */; };
+		DD97DAFC2C06213100194C2E /* EditGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD97DAFB2C06213100194C2E /* EditGroupView.swift */; };
+		DD97DB002C0629BC00194C2E /* UserList.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD97DAFF2C0629BC00194C2E /* UserList.swift */; };
+		DD97DB022C062ABE00194C2E /* UserRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD97DB012C062ABE00194C2E /* UserRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -99,6 +102,9 @@
 		C3DB80E72BA9E50A005E7CF6 /* GroupDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDetailView.swift; sourceTree = "<group>"; };
 		DD8DB3AD2BAC620A002F94B8 /* GroupCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCard.swift; sourceTree = "<group>"; };
 		DD8DB3AF2BAC7307002F94B8 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		DD97DAFB2C06213100194C2E /* EditGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupView.swift; sourceTree = "<group>"; };
+		DD97DAFF2C0629BC00194C2E /* UserList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserList.swift; sourceTree = "<group>"; };
+		DD97DB012C062ABE00194C2E /* UserRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +207,9 @@
 				C3B67B202BFBE457004F282B /* RegisterPage.swift */,
 				C3B67B242BFC6ABA004F282B /* UserAuth.swift */,
 				C3B67B262BFC8D9D004F282B /* VotingView.swift */,
+				DD97DAFB2C06213100194C2E /* EditGroupView.swift */,
+				DD97DAFF2C0629BC00194C2E /* UserList.swift */,
+				DD97DB012C062ABE00194C2E /* UserRow.swift */,
 			);
 			path = MenuProject;
 			sourceTree = "<group>";
@@ -342,6 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3B67B1B2BFBE365004F282B /* Restaurant.swift in Sources */,
+				DD97DB002C0629BC00194C2E /* UserList.swift in Sources */,
 				C3B67B292BFCC863004F282B /* RestaurantManager.swift in Sources */,
 				C31A5AD62BA2E6A100470036 /* ContentView.swift in Sources */,
 				C3B67B1F2BFBE43E004F282B /* SwiftUIView.swift in Sources */,
@@ -353,7 +363,9 @@
 				C31A5B532BA2F34900470036 /* DataManager.swift in Sources */,
 				C31A5AD42BA2E6A100470036 /* MenuProjectApp.swift in Sources */,
 				C3DB80E82BA9E50A005E7CF6 /* GroupDetailView.swift in Sources */,
+				DD97DAFC2C06213100194C2E /* EditGroupView.swift in Sources */,
 				C31A5B4F2BA2F2A800470036 /* ListView.swift in Sources */,
+				DD97DB022C062ABE00194C2E /* UserRow.swift in Sources */,
 				C31A5B552BA3126300470036 /* CreateGroupView.swift in Sources */,
 				C31A5B512BA2F2DD00470036 /* Group.swift in Sources */,
 			);

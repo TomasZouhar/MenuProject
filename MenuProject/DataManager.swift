@@ -53,6 +53,30 @@ class DataManager: ObservableObject {
         }
     }
     
+    func fetchUserName(userId: String, completion: @escaping (String?) -> Void) {
+            let db = Firestore.firestore()
+            let ref = db.collection("Users").document(userId)
+            
+            ref.getDocument { snapshot, error in
+                guard error == nil else {
+                    print(error!.localizedDescription)
+                    completion(nil)
+                    return
+                }
+                
+                if let snapshot = snapshot {
+                    let data = snapshot.data()
+                    if let name = data?["name"] as? String {
+                        completion(name)
+                    } else {
+                        completion(nil)
+                    }
+                } else {
+                    completion(nil)
+                }
+            }
+        }
+    
     func createGroup(name: String){
         let id = UUID().uuidString
         
@@ -212,5 +236,63 @@ class DataManager: ObservableObject {
                 }
             }
         }
+    }
+    
+    func addUserToGroup(name: String, groupId: String) {
+            let db = Firestore.firestore()
+
+            db.collection("Users").whereField("name", isEqualTo: name).getDocuments { querySnapshot, error in
+                guard let documents = querySnapshot?.documents, let document = documents.first else {
+                    print("User not found")
+                    return
+                }
+
+                let userId = document.documentID
+
+                db.collection("Groups").document(groupId).updateData([
+                    "joinedUsers": FieldValue.arrayUnion([userId])
+                ]) { error in
+                    if let error = error {
+                        print("Error adding user: \(error.localizedDescription)")
+                    } else {
+                        print("User added successfully")
+                        self.fetchGroups() // Fetch updated groups
+                    }
+                }
+            }
+        }
+    
+    func removeUserFromGroup(userId: String, groupId: String) {
+            let db = Firestore.firestore()
+
+            db.collection("Groups").document(groupId).updateData([
+                "joinedUsers": FieldValue.arrayRemove([userId])
+            ]) { error in
+                if let error = error {
+                    print("Error removing user: \(error.localizedDescription)")
+                } else {
+                    print("User removed successfully")
+                    self.fetchGroups() // Fetch updated groups
+                }
+            }
+        }
+
+    func updateGroupName(id: String, newName: String) {
+        let db = Firestore.firestore()
+
+        db.collection("Groups").document(id).updateData([
+            "name": newName
+        ]) { error in
+            if let error = error {
+                print("Error updating group name: \(error.localizedDescription)")
+            } else {
+                print("Group name updated successfully")
+                self.fetchGroups() // Fetch updated groups
+            }
+        }
+    }
+    
+    func clearData(){
+        groups.removeAll()
     }
  }

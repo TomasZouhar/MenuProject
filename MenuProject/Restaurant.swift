@@ -30,7 +30,7 @@ func getMockData(maxRestaurants: Int) -> [Restaurant] {
 }
 
 func getDataFromAPI(completion: @escaping ([Restaurant]?) -> Void) {
-    guard let url = URL(string: "https://menuparser.azurewebsites.net/api/menu/parse?url=https://www.menicka.cz/brno.html") else {
+    guard let url = URL(string: "https://menuparser.azurewebsites.net/api/menu/parsefi") else {
         completion(nil)
         return
     }
