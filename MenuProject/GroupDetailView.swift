@@ -40,6 +40,20 @@ struct GroupDetailView: View {
                         .font(.title2)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity, alignment: .center)
+                    //Text("\"The best group ever!\"") // Do we want description?
+                    //Text("Owner: \(group.owner)")
+
+                    // Display the most voted restaurant
+                    if group.votingRestaurants.first as Restaurant? != nil  {
+                        HStack {
+                            Image(systemName: "star.fill")
+                                .foregroundColor(.orange)
+                            Text("\(group.votingRestaurants.first!.name)")
+                                .fontWeight(.bold)
+                        }
+                        .padding()
+                        
+                    }
                 }
                 .padding()
                 .background(sparklingYellow)
